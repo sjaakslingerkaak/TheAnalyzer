@@ -9,11 +9,6 @@ rating = 0
 def index():
 	return "index"
 
-#@app.route('/get_rating')
-#def get_rating():
-#	global rating
-#	return rating
-
 @app.route('/get_userstories')
 def get_userstories():
 	url = "https://api.trello.com/1/lists/5a9cfda59445da34626f6f98/cards?fields=name"
@@ -55,7 +50,7 @@ def check_role():
 def check_feature():
 	global rating
 	userstories = get_userstories()
-	check_role()
+	#check_role()
 	data = []
 	for v in userstories:
 		#print v['name']
@@ -81,6 +76,22 @@ def check_length():
 		else:
 			return 'Bad Userstory'
 	return data
+
+@app.route('/get_all_ratings')
+def get_all_ratings():
+	ratings_role = []
+	ratings_feature = []
+	#ratings_total = []
+	checkrole = check_role()
+	checkfeature = check_feature()
+	for r in checkrole:
+		ratings_role.append(r['Rating'])
+	for r in checkfeature:
+		ratings_feature.append(r['Rating'])
+	ratings_total = [x + y for x, y in zip(ratings_role, ratings_feature)]
+	return ratings_total
+
+
 
 @app.route('/test')
 def test():
